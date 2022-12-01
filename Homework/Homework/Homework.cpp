@@ -1,20 +1,88 @@
-// Homework.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+/* Write a program that prints the distinct words in its input sorted
+into decreasing order of frequency of occurrence.
+Precede each word by its count. */
 
+/*
+homework assignment
+procedural programming
+Friederike Weilbeer, 20220630
+*/ 
+
+#include <algorithm>
+#include <map>
+#include <vector>
+#include <string>
 #include <iostream>
+using namespace std;
+
+// Comparator function to sort pairs
+// according to second value
+bool compare(pair<string, int>& a,
+	pair<string, int>& b)
+{
+	return a.second > b.second;
+}
+
+// Function to sort the map according
+// to value in a (key-value) pairs
+void sort(map<string, int>& M)
+{
+
+	// Declare vector of pairs
+	vector<pair<string, int>> A;
+
+	// Copy key-value pair from Map
+	// to vector of pairs
+	for (auto& it : M) {
+		A.push_back(it);
+	}
+
+	// Sort using comparator function
+	sort(A.begin(), A.end(), compare);
+
+	// Print the sorted value
+	for (auto& it : A) {
+
+		cout << it.second << ' '
+			<< it.first << endl;
+	}
+}
+
+// calculate frequency and store in map
+void frequency(string str) {
+
+	map<string, int> map;
+	string word = "";
+
+	for (int i = 0; i < str.length(); i++) {
+		// look for " " to devide words
+		if (str[i] == ' ') {
+			// new word
+			if (map.find(word) == map.end()) {
+				map.insert(make_pair(word, 1));
+				word = "";
+			}
+			else {
+				map[word]++;
+				word = "";
+			}
+		}
+		else {
+			word += str[i];
+		}
+	}
+	sort(map);	
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+
+	string input;
+
+	// read in user input
+	cout << "Please enter yout text: " << endl;
+	getline(cin, input);
+	// insert " " at the end of the string to make sure we get the last word too
+	input += " ";
+	frequency(input);
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
